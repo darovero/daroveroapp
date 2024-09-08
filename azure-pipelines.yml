@@ -38,9 +38,10 @@ jobs:
   - task: ArchiveFiles@2
     displayName: 'Zip Build Folder'
     inputs:
-      rootFolderOrFile: '.\build\deploy_package'
+      rootFolderOrFile: '$(Build.SourcesDirectory)\build\deploy_package'
       includeRootFolder: false
-      archiveFile: 'build-$(Build.BuildId).zip'
+      archiveFile: '$(Build.ArtifactStagingDirectory)\build-$(Build.BuildId).zip'
+      replaceExistingArchive: true
 
   - task: PublishBuildArtifacts@1
     displayName: 'Publish Artifact: drop'
