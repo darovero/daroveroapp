@@ -7,19 +7,19 @@ resources:
   repositories:
     - repository: 'GitHubRepo'
       type: 'github'
-      name: 'darovero/daroveroapp'
-      ref: 'refs/heads/develop'
-      endpoint: 'github_darovero'
+      name: 'darovero/daroveroapp'  # Repositorio correcto
+      ref: 'refs/heads/develop'  # Rama develop
+      endpoint: 'github_darovero'  # Nombre de la conexión de servicio configurada con el PAT
 
 pool:
-  vmImage: 'windows-latest'
+  vmImage: 'windows-latest'  # Definición a nivel del pipeline para usar la imagen de agente más reciente de Windows
 
 jobs:
 - job: 'Build'
-  displayName: 'Build App DaroveroApp'
+  displayName: 'Agent job 1'
 
   steps:
-  - checkout: 'GitHubRepo'
+  - checkout: 'GitHubRepo'  # Checkout del repositorio desde GitHub usando la conexión de servicio
 
   - task: PowerShell@2
     displayName: 'Build Project'
@@ -35,21 +35,21 @@ jobs:
           # Publicar el proyecto en la carpeta de publicación
           dotnet publish -c Release -o $(Build.SourcesDirectory)\build\deploy_package
 
-          # # Verificar si los archivos se publicaron correctamente
-          # if (-Not (Test-Path -Path "$(Build.SourcesDirectory)\build\deploy_package")) {
-          #   Write-Error "Directory '$(Build.SourcesDirectory)\build\deploy_package' does not exist after publish."
-          #   exit 1
+          # Verificar si los archivos se publicaron correctamente
+          if (-Not (Test-Path -Path "$(Build.SourcesDirectory)\build\deploy_package")) {
+            Write-Error "Directory '$(Build.SourcesDirectory)\build\deploy_package' does not exist after publish."
+            exit 1
           }
 
-  # - task: PowerShell@2
-  #   displayName: 'Verify Publish Folder'
-  #   inputs:
-  #     targetType: 'inline'
-  #     script: |
-  #       if (-Not (Test-Path -Path "$(Build.SourcesDirectory)\build\deploy_package")) {
-  #         Write-Error "Directory '$(Build.SourcesDirectory)\build\deploy_package' does not exist."
-  #         exit 1
-  #       }
+  - task: PowerShell@2
+    displayName: 'Verify Publish Folder'
+    inputs:
+      targetType: 'inline'
+      script: |
+        if (-Not (Test-Path -Path "$(Build.SourcesDirectory)\build\deploy_package")) {
+          Write-Error "Directory '$(Build.SourcesDirectory)\build\deploy_package' does not exist."
+          exit 1
+        }
 
   - task: ArchiveFiles@2
     displayName: 'Zip Build Folder'
