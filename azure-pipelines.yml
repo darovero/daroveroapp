@@ -35,12 +35,12 @@ jobs:
           # Publish the project (optional, if you want to generate the files for production)
           dotnet publish -c Release -o ./publish
 
-  - task: ArchiveFiles@2
-    displayName: 'Zip Build Folder'
+  - task: PowerShell@2
+    displayName: 'Zip Build Folder using PowerShell'
     inputs:
-      rootFolderOrFile: '$(Build.SourcesDirectory)\build\deploy_package'
-      archiveType: 'zip'
-      archiveFile: '$(Build.ArtifactStagingDirectory)\build-$(Build.BuildId).zip'
+      targetType: 'inline'
+      script: |
+        Compress-Archive -Path "$(Build.SourcesDirectory)\build\deploy_package\*" -DestinationPath "$(Build.ArtifactStagingDirectory)\build-$(Build.BuildId).zip"
       replaceExistingArchive: true
 
   - task: PublishBuildArtifacts@1
