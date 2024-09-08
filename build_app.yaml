@@ -1,0 +1,51 @@
+trigger:
+  branches:
+    include:
+      - develop
+
+resources:
+  repositories:
+    - repository: 'GitHubRepo'
+      type: 'github'
+      name: 'darovero/daroveroapp'  # Repositorio correcto
+      ref: 'refs/heads/develop'  # Rama develop
+      endpoint: 'github_darovero'  # Nombre de la conexión de servicio configurada con el PAT
+
+pool:
+  vmImage: 'windows-latest'  # Definición a nivel del pipeline para usar la imagen de agente más reciente de Windows
+
+jobs:
+- job: 'Build'
+  displayName: 'Agent job 1'
+
+  steps:
+  - checkout: 'GitHubRepo'  # Checkout del repositorio desde GitHub usando la conexión de servicio
+
+  - task: PowerShell@2
+    displayName: 'Build Project'
+    inputs:
+      targetType: 'inline'
+      script: |
+          # Restore NuGet packages (if necessary)
+          dotnet restore
+
+          # Build the project
+          dotnet build
+
+          # Publish the project (optional, if you want to generate the files for production)
+          dotnet publish -c Release -o ./publish
+
+  - task: ArchiveFiles@2
+    displayName: 'Zip Build Folder'
+    inputs:
+      rootFolderOrFile: '$(Build.SourcesDirectory)\build\deploy_package'
+      archiveType: 'zip'
+      archiveFile: '$(Build.ArtifactStagingDirectory)\build-$(Build.BuildId).zip'
+      replaceExistingArchive: true
+
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish Artifact: drop'
+    inputs:
+      PathtoPublish: '$(Build.ArtifactStagingDirectory)\build-$(Build.BuildId).zip'
+      artifactName: 'drop'
+      artifactType: 'Container'
