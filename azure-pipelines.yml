@@ -26,6 +26,9 @@ jobs:
     inputs:
       targetType: 'inline'
       script: |
+          # Restore NuGet packages (if necessary)
+          dotnet restore
+
           # Build the project
           dotnet build
 
