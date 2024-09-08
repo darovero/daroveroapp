@@ -1,0 +1,23 @@
+# Compiled binary folder
+bin/
+obj/
+
+# NuGet packages
+*.nupkg
+*.snupkg
+
+# VS Code files
+.vscode/
+.vscode/*
+
+# Rider files
+.idea/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Logs
+*.log
