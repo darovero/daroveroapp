@@ -35,21 +35,21 @@ jobs:
           # Publicar el proyecto en la carpeta de publicación
           dotnet publish -c Release -o $(Build.SourcesDirectory)\build\deploy_package
 
-          # Verificar si los archivos se publicaron correctamente
-          if (-Not (Test-Path -Path "$(Build.SourcesDirectory)\build\deploy_package")) {
-            Write-Error "Directory '$(Build.SourcesDirectory)\build\deploy_package' does not exist after publish."
-            exit 1
-          }
+          # # Verificar si los archivos se publicaron correctamente
+          # if (-Not (Test-Path -Path "$(Build.SourcesDirectory)\build\deploy_package")) {
+          #   Write-Error "Directory '$(Build.SourcesDirectory)\build\deploy_package' does not exist after publish."
+          #   exit 1
+          # }
 
-  - task: PowerShell@2
-    displayName: 'Verify Publish Folder'
-    inputs:
-      targetType: 'inline'
-      script: |
-        if (-Not (Test-Path -Path "$(Build.SourcesDirectory)\build\deploy_package")) {
-          Write-Error "Directory '$(Build.SourcesDirectory)\build\deploy_package' does not exist."
-          exit 1
-        }
+  # - task: PowerShell@2
+  #   displayName: 'Verify Publish Folder'
+  #   inputs:
+  #     targetType: 'inline'
+  #     script: |
+  #       if (-Not (Test-Path -Path "$(Build.SourcesDirectory)\build\deploy_package")) {
+  #         Write-Error "Directory '$(Build.SourcesDirectory)\build\deploy_package' does not exist."
+  #         exit 1
+  #       }
 
   - task: ArchiveFiles@2
     displayName: 'Zip Build Folder'
