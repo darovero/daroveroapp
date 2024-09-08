@@ -21,22 +21,22 @@ jobs:
   steps:
   - checkout: 'GitHubRepo'
 
-- task: AzurePowerShell@5
-  displayName: 'Build Project'
-  inputs:
-    azureSubscription: 'all_spn'
-    ScriptType: 'InlineScript'
-    Inline: |
-      # Restaurar paquetes NuGet (si es necesario)
-      dotnet restore
+  - task: AzurePowerShell@5
+    displayName: 'Build Project'
+    inputs:
+      azureSubscription: 'all_spn'
+      ScriptType: 'InlineScript'
+      Inline: |
+        # Restaurar paquetes NuGet (si es necesario)
+        dotnet restore
 
-      # Construir el proyecto
-      dotnet build
+        # Construir el proyecto
+        dotnet build
 
-      # Publicar el proyecto en la carpeta de publicación
-      dotnet publish -c Release -o $(Build.SourcesDirectory)\build\deploy_package
-    azurePowerShellVersion: 'LatestVersion'  # Usar la última versión de Azure PowerShell
-    workingDirectory: '$(System.DefaultWorkingDirectory)'  # Asegúrate de trabajar en el directorio correcto
+        # Publicar el proyecto en la carpeta de publicación
+        dotnet publish -c Release -o $(Build.SourcesDirectory)\build\deploy_package
+      azurePowerShellVersion: 'LatestVersion'  # Usar la última versión de Azure PowerShell
+      workingDirectory: '$(System.DefaultWorkingDirectory)'  # Asegúrate de trabajar en el directorio correcto
 
   - task: ArchiveFiles@2
     displayName: 'Zip Build Folder'
