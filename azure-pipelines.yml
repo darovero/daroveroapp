@@ -58,7 +58,6 @@ jobs:
       includeRootFolder: false
       archiveFile: '$(Build.ArtifactStagingDirectory)\build-$(Build.BuildId).zip'
       replaceExistingArchive: true
-        replaceExistingArchive: true
 
   - task: PublishBuildArtifacts@1
     displayName: 'Publish Artifact: drop'
